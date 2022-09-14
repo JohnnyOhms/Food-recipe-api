@@ -16,6 +16,17 @@ class GetReciepe{
             return data
         } catch (error) {
             alert(`${error} Refreash page`)
+
+        }
+    }
+
+    async getReciepeDetials(id) {
+        try {
+            let res = await fetch(`${detailsURL}${id}`)
+            let data = await res.json()
+            return data;
+        } catch (error) {
+            alert(`${error} failed to load detials`)
         }
     }
 }
@@ -25,31 +36,93 @@ class Logic{
         search_bnt.addEventListener("click", (e) => {
             e.preventDefault()
             getReciepe.getData()
-                .then(data =>logic.displayData(data.meals))
+                .then(data => {
+                    logic.displayData(data.meals)
+                    console.log(data)
+                })
+                .then(() => {
+                    logic.getViewButtons()
+                })
+                
         } )
     }
 
     displayData(data) {
-        let display = ''
-        data.forEach(item => {
-            display += `
-                 <div class="single-meal">
-                    <div class="meal-img">
-                        <img src="${item.strMealThumb}" alt="" srcset="">
+        if (data === null) {
+            this.noRecipe()
+        } else {
+            let display = ''
+            data.forEach(item => {
+                display += `
+                     <div class="single-meal">
+                        <div class="meal-img">
+                            <img src="${item.strMealThumb}" alt="" srcset="">
+                        </div>
+                        <span>${this.checkNameLegngth(item.strMeal)}</span>
+                        <div class="view-receipe">
+                            <button id="view-receipe" data-id="${item.idMeal}">view-receipe</button>
+                        </div>
                     </div>
-                    <span>${item.strMeal}</span>
-                    <div class="view-receipe">
-                        <button id="view-receipe" data-id="${item.idMeal}">view-receipe</button>
-                    </div>
-                </div>
-            `
-            mealContainer.innerHTML = display;
-        });
-       
+                `
+                mealContainer.innerHTML = display;
+            });
+            this.diplayLabel()
+            form.reset()
+        }
+    }
+
+    checkNameLegngth(name){
+        if (name.length > 35) {
+            return name.substring(0, 25)
+        }
+        return name   
+    }
+
+    diplayLabel() {
+        if (!input.value) {
+            searchName.textContent = `all available receipe`;
+            searchName.style.color = "orangeRed"
+            inst.style.display = "none"
+        } else {
+            searchName.textContent = `"${input.value}" related receipe`;
+            searchName.style.color = "orangeRed"
+            inst.style.display = "none" 
+        }
+    }
+
+    noRecipe() {
+        searchName.textContent = "No Recipe found"
+        searchName.style.color = "red"
+        mealContainer.innerHTML = ""
+         inst.style.display = "none"
+        setTimeout(() => {
+            searchName.textContent = ''
+            searchName.style.color = "orangeRed"
+            inst.style.display = "block"
+        }, 2000);
+        form.reset()
+    }
+
+    getViewButtons() {
+        let viewBtn = [...document.querySelectorAll("#view-receipe")]
+        viewBtn.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                let id = btn.dataset.id;
+                getReciepe.getReciepeDetials(id)
+                    .then((data) => {
+                        this.displayDetails(data)
+                        console.log(data)
+                })
+            })
+        })
+    }
+
+    displayDetails(data) {
+        
     }
 }
 
-
-const getReciepe = new GetReciepe()
-const logic = new Logic()
-logic.searchReceipe();
+    const getReciepe = new GetReciepe()
+    const logic = new Logic()
+    logic.searchReceipe();
+    
