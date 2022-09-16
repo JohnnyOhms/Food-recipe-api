@@ -22,11 +22,12 @@ body{
 }
 
 .container{
-    /* background-color: var(--black); */
-    width: 100%;
+    width: 100vw;
+    min-width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
 }
 
 .head{
@@ -99,7 +100,6 @@ body{
     margin: 0 auto;
     margin-top: 1rem;
     color: var(--black);
-    /* font-size: ; */
 }
 
 .instruction{
@@ -114,9 +114,10 @@ body{
 .meals{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-    margin: 0 1rem;
+    margin: 1rem 0;
     height: 100%;
-    background-color: rgba(0, 0, 0, .3)
+    /* background-color: rgba(0, 0, 0, .3) */
+    background-color: var(--black);
 }
 
 .meals .single-meal{
@@ -126,7 +127,7 @@ body{
     border-radius: 7px;
     display: flex;
     flex-direction: column;
-    margin: 9px auto;
+    margin: 1rem auto;
     transition: var(--transition);
 }
 
@@ -174,4 +175,85 @@ body{
     border: 1px solid var(--color-sec);
     background: var(--white);
     color: var(--black);
+}
+
+.modal-box{
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -20%);
+    margin-top: 10rem;
+    top: 0;
+    width: 30rem ;
+    height: 40rem ;
+    background-color: rgba(99, 89, 89, 1);
+    border-radius: 1rem;
+}
+
+.modal-box .modal{
+    height: 100%;
+    width: 100%;
+}
+
+.modal-box .modal .details{
+    display: flex;
+    flex-direction: column;
+    padding: 1.7rem;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.modal-box .modal .details .cancel {
+    width: 100%;
+    position: relative;
+}
+
+.modal-box .modal .details i{
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.details .img{
+    width: 20rem;
+    height: 20rem;
+    margin: 8px auto;
+}
+
+.details .img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+}
+
+.details .instruction-step > *{
+   text-align: center;
+   font-size: 20px;
+   color: wheat;
+}
+
+.details .link{
+    margin-top: 1rem;
+}
+
+.details .link i, .details .link a{
+    font-size: 20px;
+}
+
+.details .link i{
+    color: var(--color-primary);
+}
+
+
+.wrapper{
+    width: 100%;
+    height: 400rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, .6)
+}
+
+.hide{
+    display: none;
 }

@@ -4,6 +4,9 @@ const search_bnt = document.querySelector(".search-btn")
 const inst = document.querySelector(".instruction")
 const searchName = document.querySelector("#search-name")
 const mealContainer = document.querySelector(".meals")
+const modal = document.querySelector(".modal-box")
+const wrapper = document.querySelector(".wrapper")
+let singleImg;
 const ApiURL = "https://www.themealdb.com/api/json/v1/1/filter.php?i="
 const detailsURL = "https://www.themealdb.com/api/json/v1/1/lookup.php?i="
 
@@ -108,17 +111,63 @@ class Logic{
         viewBtn.forEach(btn => {
             btn.addEventListener("click", (e) => {
                 let id = btn.dataset.id;
+                let target = e.target;
+                this.getTargetImage(target)
                 getReciepe.getReciepeDetials(id)
-                    .then((data) => {
-                        this.displayDetails(data)
-                        console.log(data)
+                .then((data) => {
+                    this.displayDetails(data)
+                    this.getExistBtn()
+                        // console.log(data)
                 })
             })
         })
     }
 
+    getTargetImage(target) {
+        singleImg = target.parentElement.parentElement.children[0].children[0].src;
+        return singleImg;
+    }
+
     displayDetails(data) {
-        
+        modal.classList.remove("hide")
+        wrapper.classList.remove("hide")
+        let display;
+        display = `
+            <div class="modal">
+            <div class="details">
+                <div class="cancel">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+                <div class="img">
+                    <img src="${singleImg}" alt="" srcset="">
+                </div>
+                <div class="instruction-step">
+                    <span style="color: black;">INSTRUCTIONS FOR ${data.meals[0].strMeal}:</span>
+                    <p class="steps">${data.meals[0].strInstructions}</p>
+                </div>
+                <div class="link">
+                    <i class="fa-brands fa-youtube"></i>
+                    <a href="${data.meals[0].strYoutube}" target="_blank" rel="noopener noreferrer">Click to watch video</a>
+                </div>
+            </div>
+        </div>
+        `
+        modal.innerHTML = display;
+    }
+
+    getExistBtn() {
+        let exist = document.querySelector(".fa-circle-xmark")
+        exist.addEventListener('click', () => {
+            this.closeModal()
+        })
+        wrapper.addEventListener("click", () => {
+            this.closeModal()
+        })
+    }
+
+    closeModal() {
+        modal.classList.add("hide")
+        wrapper.classList.add("hide")
     }
 }
 
